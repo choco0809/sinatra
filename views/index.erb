@@ -1,0 +1,6 @@
+<button onclick="location.href='/memo/new'">登録</button>
+<% @memo_list.each do |memo| %>
+<div>
+  <a href="/memo/<%= memo['id'] %>"> <%= memo['title']%> </a>
+</div>
+<% end %>

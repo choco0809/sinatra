@@ -1,0 +1,9 @@
+<form action="/memo/<%= @memo["id"] %>/edit" method="POST">
+  <div>
+    <input type="text" name="title"  value=<%= @memo["title"]%>>
+  </div>
+  <div>
+    <textarea name="contents"> <%= @memo["contents"] %> </textarea>
+  </div>
+  <button type="submit">変更</button>
+</form>
