@@ -1,13 +1,13 @@
-<h2><%= @memo["title"] %></h2>
-<h3><%= @memo["contents"] %></h3>
 <div>
   <form action="/memo/<%= @memo["id"] %>/edit" method="GET">
+    <h2><%= @memo["title"] %></h2>
+    <h3><%= @memo["contents"] %></h3>
     <button>編集</button>
   </form>
 </div>
 <div>
   <form action="/memo/<%= @memo["id"] %>" method="POST">
     <input type="hidden" name="_method" value="DELETE">
-    <input type="submit", value="削除">
+    <button type="submit">削除</button>
   </form>
 </div>

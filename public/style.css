@@ -1,0 +1,24 @@
+body {
+  background-color:#EEEEEE;
+}
+
+.mainContents {
+  margin-left: auto;
+  margin-right: auto;
+  width: 980px;
+  height: 550px;
+  background-color:white
+}
+
+h1 {
+  background-color: orange;
+  display: inline-block;
+  margin-top: 50px;
+  height: 50px;
+}
+
+#add {
+  background-color: aqua;
+  width: 100px;
+  height: 50px;
+}

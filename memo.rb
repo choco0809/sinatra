@@ -7,25 +7,24 @@ require 'json'
 ##################################################
 # GET
 ##################################################
-enable :method_override
 get '/' do
-  redirect '/memo'
+  redirect to ('/memo')
 end
 
 get '/memo' do
-  @title = 'memo'
+  @title = 'Top'
   @memo_list = read_memo_json
-  erb :index
+  erb :top
 end
 
 get '/memo/new' do
-  @title = 'new'
+  @title = 'New memo'
   erb :new
 end
 
 get %r{/memo/([0-9])} do
   id = params['captures'].first.to_i
-  @title = 'show'
+  @title = 'Show memo'
   @memo = self_memo(read_memo_json,id)
   @memo["contents"].gsub!(/\r\n/,'<br>')
   erb :show
@@ -33,7 +32,7 @@ end
 
 get %r{/memo/([0-9])/edit} do
   id = params['captures'].first.to_i
-  @title = 'edit'
+  @title = 'Edit memo'
   @memo = self_memo(read_memo_json,id)
   @memo["contents"].gsub!(/\r\n/,'<br>')
   erb :edit
@@ -44,24 +43,17 @@ end
 ##################################################
 post '/memo/new' do
   add_memo(**params)
-  redirect '/memo'
+  redirect to ('/memo')
 end
 
-# post %r{/memo/([0-9])} do
-#   id = params['captures'].first.to_i
-#   delete_memo(id)
-#   redirect '/memo'
-# end
+patch %r{/memo/([0-9])/edit} do
+  edit_memo(**params) 
+  redirect to ('/memo')
+end
 
 delete %r{/memo/([0-9])} do
-  erb "delete"
-  # id = params['captures'].first.to_i
-  # delete_memo(id)
-  # redirect '/memo'
-end
-
-post %r{/memo/([0-9])/edit} do
-  edit_memo(**params)
+  id = params['captures'].first.to_i
+  delete_memo(id)
   redirect '/memo'
 end
 
