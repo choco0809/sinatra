@@ -1,6 +1,15 @@
-<button id="add" onclick="location.href='/memo/new'">追加</button>
-<% @memo_list.each do |memo| %>
-<div>
-  <a href="/memo/<%= memo['id'] %>"> <%= memo['title']%> </a>
+<div class="mainContents">
+  <div class="headContents">
+    <h1>メモアプリ</h1>
+    <button onclick="location.href='/memo/new'">追加</button>
+  </div>
+  <div class="memoContents">
+    <ul>
+      <% @memo_list.each do |memo| %>
+      <li>
+        <a href="/memo/<%= memo['id'] %>"> <%= memo['title']%> </a>
+      </li>
+      <% end %>
+    </ul>
+  </div>
 </div>
-<% end %>

@@ -1,11 +1,12 @@
-<form action="/memo/new" method="POST">
-  <div>
-    <label>タイトル</label>
-    <input type="text" name="title">
+<div class="mainContents">
+  <div class="headContents">
+    <h1>メモアプリ</h1>
   </div>
-  <div>
-    <label>内容</label>
-    <textarea name="contents"></textarea>
-  </div>
-  <button type="submit">登録</button>
-</form>
+    <form action="/memo/new" method="POST">
+      <div class="newMemo">
+        <input type="text" name="title" required>
+        <textarea name="contents"></textarea>
+        <button type="submit">登録</button>
+      </div>
+    </form>
+</div>

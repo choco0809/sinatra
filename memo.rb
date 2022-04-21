@@ -22,7 +22,7 @@ get '/memo/new' do
   erb :new
 end
 
-get %r{/memo/([0-9])} do
+get %r{/memo/([0-9]*)} do
   id = params['captures'].first.to_i
   @title = 'Show memo'
   @memo = self_memo(read_memo_json,id)
@@ -34,7 +34,7 @@ get %r{/memo/([0-9])/edit} do
   id = params['captures'].first.to_i
   @title = 'Edit memo'
   @memo = self_memo(read_memo_json,id)
-  @memo["contents"].gsub!(/\r\n/,'<br>')
+  @memo["contents"]
   erb :edit
 end
 
