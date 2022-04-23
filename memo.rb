@@ -38,6 +38,9 @@ get %r{/memo/([0-9]*)/edit} do
   erb :edit
 end
 
+not_found do
+  'This is nowhere to be found.'
+end
 ##################################################
 # POST
 ##################################################
