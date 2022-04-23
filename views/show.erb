@@ -2,13 +2,17 @@
   <div class="headContents">
     <h1>メモアプリ</h1>
   </div>
-  <p><%= @memo["title"] %></p>
-  <p><%= @memo["contents"] %></p>
-  <form action="/memo/<%= @memo["id"] %>/edit" method="GET">
-  <button id="editButton">編集</button>
-  </form>
-  <form action="/memo/<%= @memo["id"] %>" method="POST">
-  <input type="hidden" name="_method" value="DELETE">
-  <button type="submit">削除</button>
-  </form>
+  <div class="newMemo">
+    <p id="memoTitle"><%= @memo["title"] %></p>
+    <p id="memoContents"><%= @memo["contents"] %></p>
+    <div class="footContents">
+      <form action="/memo/<%= @memo["id"] %>/edit" method="GET">
+      <button type="submit">編集</button>
+      </form>
+      <form action="/memo/<%= @memo["id"] %>" method="POST">
+      <input type="hidden" name="_method" value="DELETE">
+      <button type="submit">削除</button>
+      </form>
+    </div>
+  </div>
 </div>

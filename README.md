@@ -1,5 +1,6 @@
 # SinatraでシンプルなWebアプリを作ろう
 
-## 手順
-`$ bundle exec ruby memo.rb`
-http://localhost:4567/ にアクセス
+## Usage
+1. `$ bundle install`
+1. `$ bundle exec ruby memo.rb`
+access the http://localhost:4567/

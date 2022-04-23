@@ -1,9 +1,11 @@
 <div class="mainContents">
   <div class="headContents">
     <h1>メモアプリ</h1>
-    <button onclick="location.href='/memo/new'">追加</button>
+    <form action="/memo/new" method="GET">
+    <button type="submit">追加</button>
+    </form>
   </div>
-  <div class="memoContents">
+  <div class="memoList">
     <ul>
       <% @memo_list.each do |memo| %>
       <li>

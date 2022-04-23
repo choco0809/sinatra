@@ -100,7 +100,7 @@ body {
   margin-left: 400px;
 }
 
-.memoContents {
+.memoList {
   width: 580px;
   height: 550px;
   font-size: 25px;
@@ -108,7 +108,7 @@ body {
   overflow: auto;
 }
 
-.memoContents a {
+.memoList a {
   margin: 20px 0px 20px 0px;
   width: 540px;
 }
@@ -117,13 +117,16 @@ body {
   width: 880px;
   height: 550px;
   margin: 10px 50px 0px 50px;
-  text-align: center;
 }
 
 .newMemo input {
   height: 50px;
   width: 400px;
   margin: 0px 240px 0px 240px;
+}
+
+.newMemo button {
+  margin: 0px 390px 0px 390px;
 }
 
 .newMemo textarea {
@@ -133,8 +136,19 @@ body {
   font-family:'メイリオ';
 }
 
+.footContents {
+  width: 300px;
+  margin: 0px 290px 0px 290px;
+  display: flex;
+}
+
+.footContents button {
+  margin: 0 25px 0 25px ;
+}
+
 input,textarea {
   display: block;
+  background-color: #CCCCCC;
   font-size: 25px;
 }
 
@@ -159,5 +173,22 @@ ul {
 }
 
 a {
+  font-size: 25px;
   display: block;
+}
+
+p {
+  font-size: 25px;
+}
+
+#memoTitle {
+  height: 50px;
+  width: 400px;
+  margin: 0px 240px 0px 240px;
+}
+
+#memoContents {
+  height: 350px;
+  width: 400px;
+  margin: 20px 240px 20px 240px;
 }
