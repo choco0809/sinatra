@@ -3,7 +3,7 @@
     <h1>メモアプリ</h1>
   </div>
   <div class="newMemo">
-    <p id="memoTitle"><%= @memo["title"] %></p>
+    <p id="memoTitle"><%= @memo['title'] %></p>
     <p id="memoContents"><%= @memo["contents"] %></p>
     <div class="footContents">
       <form action="/memo/<%= @memo["id"] %>/edit" method="GET">

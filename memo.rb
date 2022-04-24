@@ -3,6 +3,7 @@
 require 'sinatra'
 require 'sinatra/reloader'
 require 'json'
+require 'pg'
 
 ##################################################
 # GET
@@ -13,7 +14,7 @@ end
 
 get '/memo' do
   @title = 'Top'
-  @memo_list = read_memo_json
+  @memo_list = get_memos
   erb :top
 end
 
@@ -25,7 +26,7 @@ end
 get %r{/memo/([0-9]*)} do
   id = params['captures'].first.to_i
   @title = 'Show memo'
-  @memo = self_memo(read_memo_json, id)
+  @memo = edit_memos(id)
   @memo['contents'].gsub!(/\r\n/, '<br>')
   erb :show
 end
@@ -33,8 +34,8 @@ end
 get %r{/memo/([0-9]*)/edit} do
   id = params['captures'].first.to_i
   @title = 'Edit memo'
-  @memo = self_memo(read_memo_json, id)
-  @memo['contents']
+  @memo = edit_memos(id)
+  @memo['contents'].gsub!(/\r\n/, '<br>')
   erb :edit
 end
 
@@ -45,7 +46,8 @@ end
 # POST
 ##################################################
 post '/memo/new' do
-  add_memo(**params)
+  # add_memo(**params)
+  add_memos(**params)
   redirect to('/memo')
 end
 
@@ -56,8 +58,10 @@ end
 
 delete %r{/memo/([0-9]*)} do
   id = params['captures'].first.to_i
-  delete_memo(id)
-  redirect '/memo'
+  #delete_memo(id)
+  #redirect '/memo'
+  delete_memos(id)
+  redirect to('/memo')
 end
 
 ##################################################
@@ -125,3 +129,27 @@ def sanitize(sanitize_strings)
     sanitize_strings[:contents].gsub!(sanitize_word[:before_string], sanitize_word[:after_string])
   end
 end
+
+def get_memos
+  connect = PG::Connection.open(dbname: "sinatra", user: "choco")
+  results = connect.exec("select * from memos")
+  results.map { |result| result}
+end
+
+# def edit_memos(id)
+#   connect = PG::connect(dbname: "sinatra", user: "choco")
+#   results = connect.exec("select * from memos where id = #{id}")
+#   connect.finish
+#   results.map { |result| result}[0]
+# end
+
+# def delete_memos(id)
+#   connect = PG::connect(dbname: "sinatra", user: "choco")
+#   results = connect.exec("delete from memos where id = #{id}")
+#   connect.finish
+# end
+
+# def add_memos(id)
+#   sanitize(**params)
+#   params['id'] = max_id(read_memo_json) + 1
+# end
