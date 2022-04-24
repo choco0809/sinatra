@@ -8,21 +8,21 @@ require 'json'
 # GET
 ##################################################
 get '/' do
-  redirect to('/memo')
+  redirect to('/memos')
 end
 
-get '/memo' do
+get '/memos' do
   @title = 'Top'
   @memo_list = read_memo_json
   erb :top
 end
 
-get '/memo/new' do
+get '/memos/new' do
   @title = 'New memo'
   erb :new
 end
 
-get %r{/memo/([0-9]*)} do
+get %r{/memos/([0-9]*)} do
   id = params['captures'].first.to_i
   @title = 'Show memo'
   @memo = self_memo(read_memo_json, id)
@@ -30,7 +30,7 @@ get %r{/memo/([0-9]*)} do
   erb :show
 end
 
-get %r{/memo/([0-9]*)/edit} do
+get %r{/memos/([0-9]*)/edit} do
   id = params['captures'].first.to_i
   @title = 'Edit memo'
   @memo = self_memo(read_memo_json, id)
@@ -44,20 +44,20 @@ end
 ##################################################
 # POST
 ##################################################
-post '/memo/new' do
+post '/memos/new' do
   add_memo(**params)
-  redirect to('/memo')
+  redirect to('/memos')
 end
 
-patch %r{/memo/([0-9])*/edit} do
+patch %r{/memos/([0-9])*/edit} do
   edit_memo(**params)
-  redirect to('/memo')
+  redirect to('/memos')
 end
 
-delete %r{/memo/([0-9]*)} do
+delete %r{/memos/([0-9]*)} do
   id = params['captures'].first.to_i
   delete_memo(id)
-  redirect '/memo'
+  redirect '/memos'
 end
 
 ##################################################

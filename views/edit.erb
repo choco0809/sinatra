@@ -3,7 +3,7 @@
     <h1>メモアプリ</h1>
   </div>
   <div class="newMemo">
-    <form action="/memo/<%= @memo["id"] %>/edit" method="POST">
+    <form action="/memos/<%= @memo["id"] %>/edit" method="POST">
     <input type="text" name="title" value=<%= @memo["title"]%>>
     <textarea name="contents"><%= @memo["contents"] %></textarea>
     <input type="hidden" name="_method" value="PATCH">

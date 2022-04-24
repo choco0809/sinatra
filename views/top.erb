@@ -1,7 +1,7 @@
 <div class="mainContents">
   <div class="headContents">
     <h1>メモアプリ</h1>
-    <form action="/memo/new" method="GET">
+    <form action="/memos/new" method="GET">
     <button type="submit">追加</button>
     </form>
   </div>
@@ -9,7 +9,7 @@
     <ul>
       <% @memo_list.each do |memo| %>
       <li>
-        <a href="/memo/<%= memo['id'] %>"> <%= memo['title']%> </a>
+        <a href="/memos/<%= memo['id'] %>"> <%= memo['title']%> </a>
       </li>
       <% end %>
     </ul>
