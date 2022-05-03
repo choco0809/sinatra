@@ -3,6 +3,7 @@
 require 'sinatra'
 require 'sinatra/reloader'
 require 'json'
+require 'cgi'
 
 ##################################################
 # GET
@@ -34,7 +35,7 @@ get %r{/memos/([0-9]*)/edit} do
   id = params['captures'].first.to_i
   @title = 'Edit memo'
   @memo = self_memo(read_memo_json, id)
-  @memo['contents']
+  @memo['contents'].gsub!(/\r\n/, '<br>')
   erb :edit
 end
 
@@ -64,13 +65,6 @@ end
 # 関数
 ##################################################
 MEMO_JSON = 'json/memo.json'
-SANITIZE_WORDS = [
-  { 'before_string': '<', 'after_string': '&lt;' },
-  { 'before_string': '>', 'after_string': '&gt;' },
-  { 'before_string': '&', 'after_string': '&amp;' },
-  { 'before_string': '“', 'after_string': '&quot;' },
-  { 'before_string': '`', 'after_string': '&#x27;' }
-].freeze
 
 def append_memo_json(params)
   File.open('json/memo.json', 'a') do |file|
@@ -92,7 +86,6 @@ def self_memo(memo_list, id)
 end
 
 def add_memo(params)
-  sanitize(**params)
   params['id'] = max_id(read_memo_json) + 1
   append_memo_json(**params)
 end
@@ -106,7 +99,6 @@ def delete_memo(memo_id)
 end
 
 def edit_memo(params)
-  sanitize(**params)
   id = params['captures'].first.to_i
   memo_list = read_memo_json
   File.new(MEMO_JSON, 'w')
@@ -116,12 +108,5 @@ def edit_memo(params)
       memo['contents'] = params['contents']
     end
     append_memo_json(memo)
-  end
-end
-
-def sanitize(sanitize_strings)
-  SANITIZE_WORDS.each do |sanitize_word|
-    sanitize_strings[:title].gsub!(sanitize_word[:before_string], sanitize_word[:after_string])
-    sanitize_strings[:contents].gsub!(sanitize_word[:before_string], sanitize_word[:after_string])
   end
 end
