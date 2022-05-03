@@ -26,7 +26,7 @@ end
 get %r{/memos/([0-9]*)} do
   id = params['captures'].first.to_i
   @title = 'Show memo'
-  @memo = self_memo(read_memo_json, id)
+  @memo = find_memo(read_memo_json, id)
   @memo['contents'].gsub!(/\r\n/, '<br>')
   erb :show
 end
@@ -34,7 +34,7 @@ end
 get %r{/memos/([0-9]*)/edit} do
   id = params['captures'].first.to_i
   @title = 'Edit memo'
-  @memo = self_memo(read_memo_json, id)
+  @memo = find_memo(read_memo_json, id)
   @memo['contents'].gsub!(/\r\n/, '<br>')
   erb :edit
 end
@@ -81,7 +81,7 @@ def read_memo_json
   File.read(file_path).split(/\n/).map { |content| JSON.parse(content) }
 end
 
-def self_memo(memo_list, id)
+def find_memo(memo_list, id)
   memo_list.map { |memo| memo['id'] == id ? memo : nil }.compact[0]
 end
 
