@@ -1,0 +1,17 @@
+<div class="mainContents">
+  <div class="headContents">
+    <h1>メモアプリ</h1>
+    <form action="/memos/new" method="GET">
+    <button type="submit">追加</button>
+    </form>
+  </div>
+  <div class="memoList">
+    <ul>
+      <% @memo_list.each do |memo| %>
+      <li>
+        <a href="/memos/<%= memo['id'] %>"> <%= CGI.escapeHTML(memo['title'])%> </a>
+      </li>
+      <% end %>
+    </ul>
+  </div>
+</div>
