@@ -3,8 +3,8 @@
     <h1>メモアプリ</h1>
   </div>
   <div class="newMemo">
-    <p id="memoTitle"><%= @memo['title'] %></p>
-    <p id="memoContents"><%= @memo["contents"] %></p>
+    <p id="memoTitle"><%= CGI.escapeHTML(@memo['title']) %></p>
+    <p id="memoContents"><%= CGI.escapeHTML(@memo["contents"]) %></p>
     <div class="footContents">
       <form action="/memos/<%= @memo["id"] %>/edit" method="GET">
       <button type="submit">編集</button>

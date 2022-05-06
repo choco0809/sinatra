@@ -3,6 +3,7 @@
 require 'sinatra'
 require 'sinatra/reloader'
 require 'pg'
+require 'cgi'
 
 ##################################################
 # GET
@@ -63,13 +64,6 @@ end
 ##################################################
 # 関数
 ##################################################
-SANITIZE_WORDS = [
-  { 'before_string': '<', 'after_string': '&lt;' },
-  { 'before_string': '>', 'after_string': '&gt;' },
-  { 'before_string': '&', 'after_string': '&amp;' },
-  { 'before_string': '“', 'after_string': '&quot;' },
-  { 'before_string': '`', 'after_string': '&#x27;' }
-].freeze
 
 def memos
   results = Memo.memos
@@ -77,7 +71,6 @@ def memos
 end
 
 def add_memo(params)
-  sanitize(**params)
   results = Memo.max_id
   max_id = results.map { |result| result }[0]
   params['id'] = max_id['max'].to_i + 1
@@ -95,13 +88,6 @@ end
 
 def delete_memo(id)
   Memo.delete_memo(id)
-end
-
-def sanitize(sanitize_strings)
-  SANITIZE_WORDS.each do |sanitize_word|
-    sanitize_strings[:title].gsub!(sanitize_word[:before_string], sanitize_word[:after_string])
-    sanitize_strings[:contents].gsub!(sanitize_word[:before_string], sanitize_word[:after_string])
-  end
 end
 
 class Memo
