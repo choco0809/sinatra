@@ -2,7 +2,7 @@
 
 require 'sinatra'
 require 'sinatra/reloader'
-require 'json'
+require 'pg'
 require 'cgi'
 
 ##################################################
@@ -14,7 +14,7 @@ end
 
 get '/memos' do
   @title = 'Top'
-  @memo_list = read_memo_json
+  @memo_list = memos
   erb :top
 end
 
@@ -26,7 +26,7 @@ end
 get %r{/memos/([0-9]*)} do
   id = params['captures'].first.to_i
   @title = 'Show memo'
-  @memo = find_memo(read_memo_json, id)
+  @memo = show_memo(id)
   @memo['contents'].gsub!(/\r\n/, '<br>')
   erb :show
 end
@@ -34,8 +34,7 @@ end
 get %r{/memos/([0-9]*)/edit} do
   id = params['captures'].first.to_i
   @title = 'Edit memo'
-  @memo = find_memo(read_memo_json, id)
-  @memo['contents'].gsub!(/\r\n/, '<br>')
+  @memo = show_memo(id)
   erb :edit
 end
 
@@ -51,62 +50,70 @@ post '/memos/new' do
 end
 
 patch %r{/memos/([0-9])*/edit} do
-  edit_memo(**params)
+  id = params['captures'].first.to_i
+  edit_memo(id, **params)
   redirect to('/memos')
 end
 
 delete %r{/memos/([0-9]*)} do
   id = params['captures'].first.to_i
   delete_memo(id)
-  redirect '/memos'
+  redirect to('/memos')
 end
 
 ##################################################
 # 関数
 ##################################################
-MEMO_JSON = 'json/memo.json'
 
-def append_memo_json(params)
-  File.open('json/memo.json', 'a') do |file|
-    file.puts(JSON.generate(params))
-  end
-end
-
-def max_id(contents)
-  contents.map { |content| content['id'] }.max.to_i
-end
-
-def read_memo_json
-  file_path = File.expand_path(MEMO_JSON)
-  File.read(file_path).split(/\n/).map { |content| JSON.parse(content) }
-end
-
-def find_memo(memo_list, id)
-  memo_list.map { |memo| memo['id'] == id ? memo : nil }.compact[0]
+def memos
+  results = Memo.memos
+  results.map { |result| result }
 end
 
 def add_memo(params)
-  params['id'] = max_id(read_memo_json) + 1
-  append_memo_json(**params)
+  results = Memo.max_id
+  max_id = results.map { |result| result }[0]
+  params['id'] = max_id['max'].to_i + 1
+  Memo.add_memo([params['id'], params['title'], params['contents']])
 end
 
-def delete_memo(memo_id)
-  memo_list = read_memo_json
-  File.new(MEMO_JSON, 'w')
-  memo_list.each do |memo|
-    memo['id'] != memo_id && append_memo_json(memo)
+def edit_memo(id, params)
+  Memo.update_memo([id, params['title'], params['contents']])
+end
+
+def show_memo(id)
+  results = Memo.show_memo(id)
+  results.map { |result| result }[0]
+end
+
+def delete_memo(id)
+  Memo.delete_memo(id)
+end
+
+class Memo
+  @con = PG.connect(dbname: 'sinatra')
+
+  def self.memos
+    @con.exec('select * from memos')
   end
-end
 
-def edit_memo(params)
-  id = params['captures'].first.to_i
-  memo_list = read_memo_json
-  File.new(MEMO_JSON, 'w')
-  memo_list.each do |memo|
-    if memo['id'] == id
-      memo['title'] = params['title']
-      memo['contents'] = params['contents']
-    end
-    append_memo_json(memo)
+  def self.show_memo(id)
+    @con.exec('select * from memos where id = $1', [id])
+  end
+
+  def self.delete_memo(id)
+    @con.exec('delete from memos where id = $1', [id])
+  end
+
+  def self.add_memo(params)
+    @con.exec('insert into memos values($1,$2,$3)', params)
+  end
+
+  def self.update_memo(params)
+    @con.exec('update memos set title = $2, contents = $3 where id = $1', params)
+  end
+
+  def self.max_id
+    @con.exec('select max(id) from memos')
   end
 end
