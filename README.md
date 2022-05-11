@@ -15,7 +15,7 @@
 `Postgresql`で下記コマンドを実行し、`memos`テーブルを作成する
    ```
    create table memos (
-       id       numeric not null,
+       id       serial,
        title    varchar(100) not null,
        contents text
    );

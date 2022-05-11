@@ -71,10 +71,7 @@ def memos
 end
 
 def add_memo(params)
-  results = Memo.max_id
-  max_id = results.map { |result| result }[0]
-  params['id'] = max_id['max'].to_i + 1
-  Memo.add_memo([params['id'], params['title'], params['contents']])
+  Memo.add_memo([params['title'], params['contents']])
 end
 
 def edit_memo(id, params)
@@ -106,14 +103,10 @@ class Memo
   end
 
   def self.add_memo(params)
-    @con.exec('insert into memos values($1,$2,$3)', params)
+    @con.exec('insert into memos(title,contents) values($1,$2)', params)
   end
 
   def self.update_memo(params)
     @con.exec('update memos set title = $2, contents = $3 where id = $1', params)
-  end
-
-  def self.max_id
-    @con.exec('select max(id) from memos')
   end
 end
